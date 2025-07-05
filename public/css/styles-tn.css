@@ -1,0 +1,35 @@
+@media (max-width: 600px) {
+    #wrapper{
+        width: 400px;
+    }
+    main{
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    .hero-section{
+        grid-column: 1/2;
+    }
+    .hero-section h1 {
+        font-size: 1.5em;
+    }
+
+    .container-absolute{
+        padding: 10px;
+    }
+    .container-absolute img {
+        width: 100%;
+    }
+    .container-absolute div{
+        top: 10px;
+        left: 10px;
+        font-size: 0.8em;
+        gap: 3px;
+    }
+    .container-absolute button{
+        font-size: 1.3em;
+        padding: 4px 15px;
+    }
+    .section-two{
+        grid-row: 2/3;
+    }
+}
