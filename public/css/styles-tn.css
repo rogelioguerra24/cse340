@@ -6,6 +6,9 @@
         display: grid;
         grid-template-columns: 1fr;
     }
+    #inv-display{
+        grid-template-columns: 1fr 1fr;
+    }
     .hero-section{
         grid-column: 1/2;
     }
