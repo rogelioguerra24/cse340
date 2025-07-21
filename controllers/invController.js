@@ -15,8 +15,29 @@ invCont.buildByClassificationId = async function (req, res, next) {//this is a m
   res.render("./inventory/classification", {
     title: className + " vehicles",
     nav,
-    grid,
+    grid
   })
+}
+
+/* ***************************
+ *  Build Card Details page with EJS
+ * ************************** */
+invCont.buildByCarsDetails = async function (req, res, next) {//this is a method
+  const inv_id = req.params.invid
+  const data = await invModel.getInventoryByCarDetail(inv_id)
+  const section = await utilities.buildCarDetailSection(data) // this is in utilities
+  let nav = await utilities.getNav()
+  const carName = data.inv_year + " " + data.inv_make + " " + data.inv_model
+  res.render("./inventory/detailsCars", {
+    title: carName + " vehicle",
+    nav,
+    section
+  })
+}
+
+invCont.falseFunction = async function(req, res){
+  //const nav = await utilities.getNav() 
+  res.render("index", {title: "Home", nav})
 }
 
 module.exports = invCont

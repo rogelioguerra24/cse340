@@ -58,11 +58,36 @@ Util.buildClassificationGrid = async function(data){
   return grid
 }
 
+/* **************************************
+* Build the Cars Details view HTML
+* ************************************ */
+Util.buildCarDetailSection = async function(data){
+  let section
+  if(data){
+    section = "<section class='carDetails'>"
+    section += "<div class='detailImage'>"
+    section += "<img " + 'src="' + data.inv_image + '"' + 'alt="' + data.inv_make + " " + data.inv_model + '">' 
+    section += "</div>"
+    section += "<div class='description'>"
+    section += "<h2>"+ data.inv_make + " " + data.inv_model + " Details</h2>"
+    section += "<p><strong>Price:</strong> $" + data.inv_price + "</p>"
+    section += "<p><strong>Description:</strong>" + data.inv_description + "</p>"
+    section += "<p><strong>Color:</strong>" + data.inv_color + "</p>"
+    section += "<p><strong>Miles:</strong>" + data.inv_miles + "</p>"
+    section += "</div>"
+    section += "</section>"
+  } else { 
+    section += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+  }
+  return section
+}
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 
  * General Error Handling
  **************************************** */
 Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
+
 
 module.exports = Util

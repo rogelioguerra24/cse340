@@ -206,3 +206,35 @@ footer{
   font-family: var(--font-family-text);
   padding: 1em;
 }
+
+/*This design is for the details page*/
+h1 {
+  grid-column: 1/3;
+}
+.carDetails{
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1.5fr 1fr;
+  grid-column: 1/3;
+}
+.detailImage {
+  display: flex;
+  align-items: center;
+  max-width: 500px;
+}
+.detailImage img{
+  width: 100%;
+}
+.description {
+  background-color: beige;
+  border-radius: 8px;
+  padding: 10px;
+  font-family: var(--font-family-text);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: space-around;
+}
+.description strong {
+  color:green;
+}
