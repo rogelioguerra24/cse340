@@ -238,3 +238,62 @@ h1 {
 .description strong {
   color:green;
 }
+
+/*This code is for designing the form login page*/
+.login-form {
+  background-color: blanchedalmond;
+  grid-column: 1/3;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180px;
+  margin: 0 auto;
+  padding: 8px;
+  border-radius: 8px;
+  font-family: var(--font-family-text);
+}
+
+.login-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.login-form form label {
+  font-family: var(--font-family-header);
+  font-size: 1rem
+
+}
+input[type="submit"]{
+  font-family: var(--font-family-text);
+  padding: 5px;
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 100px;
+}
+
+.login-form p{
+  font-size: 0.9em;
+}
+
+input:required:valid{
+  border: 1px solid green;
+}
+
+input:required:invalid, input:focus:invalid{
+  border: 1px solid red;
+}
+/*input:required:invalid, input:focus:invalid {
+ background-image: url(/images/invalid.png);
+ background-position: right top;
+ background-repeat: no-repeat;
+}
+ input:required:valid {
+ background-image: url(/images/valid.png);
+ background-position: right top;
+ background-repeat: no-repeat;
+ }*/
