@@ -1,0 +1,97 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<%- messages() %>
+
+<% if (errors) { %>
+  <ul class="notice">
+ <% errors.array().forEach(error => { %>
+   <li><%= error.msg %></li>
+<%  }) %>
+ </ul>
+<% } %>
+<div class="inventory-form">
+
+    <form id="addNewCarInventory" action="/inv/add-inventory" method="post">
+    <fieldset>
+        <legend>All fields are required</legend>
+        <div class="form-group">
+            <label for="classification_id">Classification</label>
+            <%- classificationList %>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_make">Make</label>
+            <input type="text" name="inv_make" id="inv_make" 
+                pattern="^[A-Za-z ]+$"
+                value="<%= locals.inv_make %>"
+                title="Provide the name for the car (Only Alphabetic Characters allowed)" required>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_model">Model</label>
+            <input type="text" name="inv_model" id="inv_model" 
+                pattern="^[A-Za-z ]+$"
+                value="<%= locals.inv_model %>"
+                title="Provide the model for the car (Only Alphabetic Characters allowed)" required>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_description">Description</label>
+            <textarea rows="5" name="inv_description" id="inv_description"
+                title="Provide the description for the car" required><%= locals.inv_description %></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_image">Image Path</label>
+            <input type="text" name="inv_image" id="inv_image" 
+                pattern="^\/images\/vehicles\/[a-zA-Z0-9_-]+\.(jpg|png|jpeg|gif)$"
+                value="<%= locals.inv_image %>"
+                title="Provide the correct url for the car: (/images/vehicles/image.jpg)" required>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_thumbnail">Thumbnail Path</label>
+            <input type="text" name="inv_thumbnail" id="inv_thumbnail" 
+                pattern="^\/images\/vehicles\/[a-zA-Z0-9_-]+\.(jpg|png|jpeg|gif)$"
+                value="<%= locals.inv_thumbnail %>"
+                title="Provide the correct url for the car: (/images/vehicles/image.jpg)" required>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_price">Price</label>
+            <input type="number" name="inv_price" id="inv_price" min="0"
+                value="<%= locals.inv_price %>"
+                title="Provide the price for the car" required>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_year">Year</label>
+            <input type="number" name="inv_year" id="inv_year"
+                min="1800" max="2099"
+                value="<%= locals.inv_year %>"
+                title="Provide the year of the car" required>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_miles">Miles</label>
+            <input type="number" name="inv_miles" id="inv_miles" 
+                value="<%= locals.inv_miles %>"
+                title="Provide the miles of the car" required>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_color">Color</label>
+            <input type="text" name="inv_color" id="inv_color" 
+                pattern="^[A-Za-z ]+$"
+                value="<%= locals.inv_color %>"
+                title="Provide the color of the car (Only Alphabetic Characters allowed)" required>
+        </div>
+    </fieldset>
+
+    <input type="submit" value="Add Vehicle">
+</form>
+</div>
+
+<% } else {
+  res.redirect('/')
+} %>

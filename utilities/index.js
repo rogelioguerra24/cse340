@@ -70,10 +70,10 @@ Util.buildCarDetailSection = async function(data){
     section += "</div>"
     section += "<div class='description'>"
     section += "<h2>"+ data.inv_make + " " + data.inv_model + " Details</h2>"
-    section += "<p><strong>Price:</strong> $" + data.inv_price + "</p>"
+    section += "<p><strong>Price:</strong> $" + new Intl.NumberFormat('en-US').format(data.inv_price) + "</p>"
     section += "<p><strong>Description:</strong>" + data.inv_description + "</p>"
     section += "<p><strong>Color:</strong>" + data.inv_color + "</p>"
-    section += "<p><strong>Miles:</strong>" + data.inv_miles + "</p>"
+    section += "<p><strong>Miles:</strong>" + new Intl.NumberFormat('en-US').format(data.inv_miles) + "</p>"
     section += "</div>"
     section += "</section>"
   } else { 
@@ -81,6 +81,28 @@ Util.buildCarDetailSection = async function(data){
   }
   return section
 }
+
+/* ************************
+ * Constructs the option list in the form for adding vehicles
+ ************************** */
+Util.buildClassificationList = async function (classification_id = null) {
+    let data = await invModel.getClassifications()
+    let classificationList =
+      '<select name="classification_id" id="classificationList" required>'
+    classificationList += "<option value=" + classification_id +">Choose a Classification</option>"
+    data.rows.forEach((row) => {
+      classificationList += '<option value="' + row.classification_id + '"'
+      if (
+        classification_id != null &&
+        row.classification_id == classification_id
+      ) {
+        classificationList += " selected "
+      }
+      classificationList += ">" + row.classification_name + "</option>"
+    })
+    classificationList += "</select>"
+    return classificationList
+  }
 
 /* ****************************************
  * Middleware For Handling Errors
