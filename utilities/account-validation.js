@@ -64,13 +64,13 @@ return [
 
 validate.loginRules = () => {
 return [
-    body("email")
+    body("account_email")
     .trim()
-    .escape()
     .notEmpty()
+    .withMessage("Email is required.")
+    .bail()
     .isEmail()
-    .normalizeEmail() // refer to validator.js docs // make all words to lowercase
-    .withMessage("A valid email is required."),
+    .withMessage("A valid email is required.")
 ]
 }
 
@@ -78,16 +78,16 @@ return [
  * Check data and return errors or continue to login
  * ***************************** */
 validate.checkLogData = async (req, res, next) => {
-    const { email } = req.body
-    let errors = []
+    const { account_email } = req.body
     errors = validationResult(req)
+
     if (!errors.isEmpty()) {
         let nav = await utilities.getNav()
         res.render("account/login", {
             errors,
             title: "Login",
             nav,
-            email,
+            account_email,
             })
         return
     }

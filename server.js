@@ -17,7 +17,7 @@ const accountRoute = require("./routes/accountRoute")
 const inventoryRoute = require("./routes/inventoryRoute")
 const utilities = require("./utilities/")
 const bodyParser = require("body-parser")
-
+const cookieParser = require("cookie-parser")
 
 /* ***********************
  * Middleware
@@ -42,6 +42,10 @@ app.use(function(req, res, next){
   res.locals.messages = require('express-messages')(req, res)
   next()
 })
+
+//This is code for JWT
+app.use(cookieParser())
+app.use(utilities.checkJWTToken)
 
 
 /* ***********************

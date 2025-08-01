@@ -35,4 +35,15 @@ router.post("/add-inventory",
     addValidate.checkAddVehicleData,
     utilities.handleErrors(invController.registerVehicle));
 
+//This route is for handing the getinventory process
+router.get("/getInventory/:classification_id", 
+    utilities.handleErrors(invController.getInventoryJSON));
+
+//This route is for the update page view both get and post
+router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView));
+router.post("/update/", 
+    addValidate.newInventoryRules(),
+    addValidate.checkUpdateData,
+    utilities.handleErrors(invController.updateInventory));
+
 module.exports = router;
