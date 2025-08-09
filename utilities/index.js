@@ -132,6 +132,7 @@ Util.checkJWTToken = (req, res, next) => {
     next()
    })
  } else {
+  res.locals.accountData = null
   next()
  }
 }
@@ -147,5 +148,5 @@ Util.checkJWTToken = (req, res, next) => {
     return res.redirect("/account/login")
   }
  }
-
+ 
 module.exports = Util

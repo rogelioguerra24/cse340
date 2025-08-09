@@ -1,0 +1,60 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<%- messages() %>
+
+<% if (errors) { %>
+  <ul class="notice">
+ <% errors.array().forEach(error => { %>
+   <li><%= error.msg %></li>
+<%  }) %>
+ </ul>
+<% } %>
+<div class="inventory-form">
+
+    <form id="deleteForm" action="/inv/delete" method="post">
+    <fieldset>
+        <legend>Confirm Deletion - The delete is permanent.</legend>
+
+        <div class="form-group">
+            <label for="inv_make">Make</label>
+            <input type="text" name="inv_make" id="inv_make" 
+                pattern="^[A-Za-z ]+$"
+                value="<%= locals.inv_make %>"
+                title="Provide the name for the car (Only Alphabetic Characters allowed)" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_model">Model</label>
+            <input type="text" name="inv_model" id="inv_model" 
+                pattern="^[A-Za-z ]+$"
+                value="<%= locals.inv_model %>"
+                title="Provide the model for the car (Only Alphabetic Characters allowed)" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_price">Price</label>
+            <input type="number" name="inv_price" id="inv_price" min="0"
+                value="<%= locals.inv_price %>"
+                title="Provide the price for the car" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_year">Year</label>
+            <input type="number" name="inv_year" id="inv_year"
+                min="1800" max="2099"
+                value="<%= locals.inv_year %>"
+                title="Provide the year of the car" readonly>
+        </div>
+
+    </fieldset>
+
+    <input type="submit" id="submit" name="submit" value="Delete Vehicle">
+    <input type="hidden" name="inv_id"
+        <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
+        <% } %>>
+</form>
+</div>
+
+<% } else {
+  res.redirect('/')
+} %>

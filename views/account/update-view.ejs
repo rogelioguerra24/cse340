@@ -1,0 +1,65 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<%- messages() %>
+<% if (errors) { %>
+  <ul class="notice">
+ <% errors.array().forEach(error => { %>
+   <li><%= error.msg %></li>
+<%  }) %>
+ </ul>
+<% } %>
+
+
+<div class="login-form">
+    <p>All fields need to be fulfilled</p>
+    <form id="updateAccountForm" action="/account/update-account" method="post">
+        <div>
+            <label for="account_firstname">First Name:</label>
+            <input type="text" id="account_firstname" name="account_firstname" required
+                   value="<%= locals.account_firstname %>">
+        </div>
+
+        <div>
+            <label for="account_lastname">Last Name:</label>
+            <input type="text" id="account_lastname" name="account_lastname" required
+                   value="<%= locals.account_lastname %>">
+        </div>
+
+        <div>
+            <label for="account_email">Email:</label>
+            <input type="email" id="account_email" name="account_email" required
+                   value="<%= locals.account_email %>">
+        </div>
+
+        <input type="submit" value="Update" id="Update">
+        <input type="hidden" name="account_id"
+        <% if(accountData.account_id) { %> value="<%= accountData.account_id %>"
+        <% } %>>
+    </form>
+</div>
+
+<div class="update-header">
+    <h2>Update Password</h2>
+    <p>*note your original password will be changed</p>
+</div>
+
+<div class="login-form">
+    <p>Please enter your new password</p>
+    <form id="passwordUpdateForm" action="/account/update-password" method="post">
+        <div>
+            <label for="account_password">New Password:</label>
+            <span>Password must contain at least 1 capital letter, 1 number, and 1 special character, and be at least 12 characters long.</span>
+            <input type="password" id="account_password" name="account_password" required
+                   pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$">
+        </div>
+
+        <input type="submit" value="Update Password" id="updatePassword">
+        <input type="hidden" name="account_id"
+        <% if(accountData.account_id) { %> value="<%= accountData.account_id %>"
+        <% } %>>
+    </form>
+</div>
+
+<% } else {
+  res.redirect('/')
+} %>

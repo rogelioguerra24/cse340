@@ -4,6 +4,7 @@ const router = new express.Router()
 const invController = require("../controllers/invController")
 const utilities = require("../utilities/")
 const addValidate = require("../utilities/inventory-validation")
+const regValidate = require('../utilities/account-validation')
 
 // Route to build inventory by classification view
 router.get("/type/:classificationId",  utilities.handleErrors(invController.buildByClassificationId));
@@ -17,10 +18,14 @@ router.get("/detail/:invid",  utilities.handleErrors(invController.buildByCarsDe
 router.get("/cause-error",  utilities.handleErrors(invController.falseFunction));
 
 //This route is built to handle the add general inventory view
-router.get("/", utilities.handleErrors(invController.buildAddInventoryView));
+router.get("/", 
+    regValidate.accountAdminEmployeeType,
+    utilities.handleErrors(invController.buildAddInventoryView));
 
 //This route is to handle the add new classifications view
-router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification))
+router.get("/add-classification", 
+    regValidate.accountAdminEmployeeType,
+    utilities.handleErrors(invController.buildAddClassification))
 
 router.post("/add-classification", 
     addValidate.classificationRules(),
@@ -28,7 +33,9 @@ router.post("/add-classification",
     utilities.handleErrors(invController.registerClassification));
 
 //This route is to handle the add new vehicles view
-router.get("/add-inventory", utilities.handleErrors(invController.buildAddVehiclePage));
+router.get("/add-inventory", 
+    regValidate.accountAdminEmployeeType,
+    utilities.handleErrors(invController.buildAddVehiclePage));
 
 router.post("/add-inventory", 
     addValidate.vehicleRules(),
@@ -40,10 +47,18 @@ router.get("/getInventory/:classification_id",
     utilities.handleErrors(invController.getInventoryJSON));
 
 //This route is for the update page view both get and post
-router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView));
+router.get("/edit/:inv_id", 
+    regValidate.accountAdminEmployeeType,
+    utilities.handleErrors(invController.editInventoryView));
 router.post("/update/", 
     addValidate.newInventoryRules(),
     addValidate.checkUpdateData,
     utilities.handleErrors(invController.updateInventory));
+
+//This routes are made for handling the deletion process of an item 
+router.get("/delete/:inv_id", 
+    regValidate.accountAdminEmployeeType,
+    utilities.handleErrors(invController.deleteInventoryView))
+router.post("/delete/", utilities.handleErrors(invController.deleteInventory))
 
 module.exports = router;

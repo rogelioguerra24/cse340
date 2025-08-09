@@ -1,6 +1,20 @@
 <% if (title) { %>
 <h1><%= title %></h1>
 <%- messages() %>
+<div class="account-mng">
+  <h2>Welcome <%= accountData.account_firstname %></h2>
+  <a href="edit-account">Edit Account Information</a>
+</div>
+
+<div class="account-mng">
+  <% if (accountData.account_type === "Employee" || accountData.account_type === "Admin") { %>
+  <h2>Manage Inventory</h2>
+  <a href="/inv" title="Management View">Manage Inventory</a>
+<% } %>
+</div>
+
+
+
 <% if (errors) { %>
   <ul class="notice">
  <% errors.array().forEach(error => { %>
