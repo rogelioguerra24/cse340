@@ -108,9 +108,92 @@ async function updateAccountPassword(
   }
 }
 
+/* ***************************
+ *  Get User Reviews
+ * ************************** */
+async function getAccountReviews(account_id) {
+  try {
+    const sql = `
+      SELECT i.inv_year, i.inv_make, i.inv_model, r.review_date, r.review_id, r.inv_id
+      FROM public.review r
+      inner join public.inventory i
+      ON r.inv_id = i.inv_id
+      WHERE r.account_id = $1`
+    const data = await pool.query(sql, [account_id])
+    return data.rows
+  }catch (error){
+    console.error("model error: " + error)
+  }
+}
+
+
+/* ***************************
+ *  Get User Reviews by id
+ * ************************** */
+async function getReviewsById(review_id) {
+  try {
+    const sql = `
+      SELECT i.inv_year, i.inv_make, i.inv_model, r.review_description, r.review_date, r.review_id, r.inv_id
+      FROM public.review r
+      inner join public.inventory i
+      ON r.inv_id = i.inv_id
+      WHERE r.review_id = $1`
+    const data = await pool.query(sql, [review_id])
+    return data.rows[0]
+  }catch (error){
+    console.error("model error: " + error)
+  }
+}
+
+/* ***************************
+ *  Update Review
+ * ************************** */
+async function updateReviewData(
+  review_description,
+  review_date,
+  review_id
+) {
+  try {
+    const sql = `
+      UPDATE public.review
+      SET review_description = $1,
+          review_date  = $2
+      WHERE review_id = $3
+      RETURNING *
+    `;
+    const data = await pool.query(sql, [
+      review_description,
+      review_date,
+      review_id
+    ])
+    return data.rows[0]
+  } catch (error) {
+    console.error("model error: " + error)
+  }
+}
+
+/* ***************************
+ *  Delete Review
+ * ************************** */
+
+
+async function deleteReviewById(review_id) {
+  const sql = `
+      DELETE FROM public.review
+      WHERE review_id = $1
+    `;
+  const data = await pool.query(sql, [review_id])
+  return data
+}
+
 module.exports = {registerAccount, 
   checkExistingEmail, 
   getAccountByEmail, 
   updateAccountData,
   updateAccountPassword,
-  getAccountById}
+  getAccountById,
+  getAccountReviews,
+  getReviewsById,
+  updateReviewData,
+  deleteReviewById
+}

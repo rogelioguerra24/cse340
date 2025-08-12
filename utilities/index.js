@@ -140,7 +140,7 @@ Util.checkJWTToken = (req, res, next) => {
 /* ****************************************
  *  Check Login
  * ************************************ */
- Util.checkLogin = (req, res, next) => {
+Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
     next()
   } else {
@@ -148,5 +148,60 @@ Util.checkJWTToken = (req, res, next) => {
     return res.redirect("/account/login")
   }
  }
+
+
+/* ****************************************
+ *  Build the display review list 
+ * ************************************ */
+Util.displayReviewList = async function (data){
+  if (data && data.length > 0) {
+      let list = "";
+      data.forEach(function (review) {
+         const formattedDate = new Date(review.review_date).toLocaleDateString('en-US', {
+            month: 'long',  // Full month name (e.g., "November")
+            day: 'numeric', // Day without leading zero
+            year: 'numeric' // Four-digit year
+          });
+          list += '<div class="reviewDetails">'
+          list += '<h4>' + review.account_firstname + ' wrote on '+ formattedDate + '</h4>'
+          list += '<p>' + review.review_description + '</p>'
+          list += '</div>'
+      });
+      
+      return list
+    } else {
+      return "Be the first to write a review!"
+    }
+  
+}
+
+/* ****************************************
+ *  Build the display review list for the account
+ * ************************************ */
+Util.displayReviewAccountList = async function (data) {
+  if (data && data.length > 0) {
+    let list = '<ul>';
+    data.forEach(function (review) {
+      const formattedDate = new Date(review.review_date).toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+      
+      list += '<li>';
+      list += '<p>';
+      list += 'Reviewed the ' + review.inv_year + ' ' + review.inv_make + ' ' + review.inv_model + ' on ' + formattedDate + ' | ';
+      list += '<a href="/account/update-review/' + review.review_id + '" title="Edit review">Edit</a> | ';
+      list += '<a href="/account/delete-review/' + review.review_id + '" title="Delete review">Delete</a>';
+      list += '</p>';
+      list += '</li>';
+    });
+    list += '</ul>'; 
+    return list;
+  } else {
+    return "Begin to write reviews bro!";
+  }
+}
+ 
  
 module.exports = Util

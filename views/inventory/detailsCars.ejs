@@ -4,6 +4,52 @@
   res.redirect('/')
 } %>
 
-<%# messages() %>
-
 <%- section %>
+
+<div class="reviewDetail">
+  <h2>Customer Reviews</h2>
+  <% if (reviewList) { %>
+  <div><%- reviewList %></div>
+<% } %>
+</div>
+
+<%- messages() %>
+
+<div class="reviewFooter">
+<% if (accountData) { %>
+    <h2>Add Your Own Review</h2>
+    <form class="login-form" id="addReview" action="/inv/review" method="post">
+      <div>
+        <label for="account_firstname"> Screen name</label>
+        <input type="text" id="account_firstname" name="account_firstname" readonly
+        value="<%= accountData.account_firstname %>">
+      </div>
+      
+      <div>
+        <label for="review_description">Description</label>
+        <textarea rows="5" name="review_description" id="review_description"
+        title="Provide the review for the car" required><%= locals.review_description %></textarea>
+      </div>
+      
+      <input type="submit" id="submit" name="submit" value="Submit Review">
+      <input type="hidden" id="review_date" name="review_date"
+      value="<%= new Date().toISOString().split('T')[0] %>">
+      <input type="hidden" name="account_id"
+        <% if(accountData.account_id) { %> value="<%= accountData.account_id %>"
+        <% } %>>
+      <input type="hidden" name="inv_id"
+        <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
+        <% } %>>
+
+    </form>
+  <% } else { %>
+    <p>
+      You must 
+      <a title="Click to log in" href="/account/login">login</a> 
+      to write a review.
+    </p>
+  <% } %>
+</div>
+
+
+<script src="../../js/reviews.js"></script>

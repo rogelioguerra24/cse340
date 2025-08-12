@@ -49,5 +49,22 @@ router.post("/update-password",
   utilities.handleErrors(accController.updatePassword)
 )
 
+//This new routes is for update the reviews
+router.get("/update-review/:review_id",
+  utilities.handleErrors(accController.buildAccountEditReview)
+)
+router.post("/update-review-account",
+  validate.updateReviewRules(),
+  validate.checkUpdateReview,
+  utilities.handleErrors(accController.updateReview)
+)
+
+//This new routes is for delete the reviews
+router.get("/delete-review/:review_id",
+  utilities.handleErrors(accController.buildAccountDeleteReview)
+)
+router.post("/delete-review-account",
+  utilities.handleErrors(accController.deleteReview)
+)
 
 module.exports = router;

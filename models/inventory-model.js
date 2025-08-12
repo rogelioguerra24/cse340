@@ -162,6 +162,50 @@ async function updateInventory(
   }
 }
 
+/* ***************************
+ *  Add new Review to Car
+ * ************************** */
+ async function addNewReviewCar(
+  review_description,
+  review_date,
+  account_id,
+  inv_id
+) {
+  try {
+    const sql = `INSERT INTO public.review 
+    (review_description, review_date, account_id, inv_id) VALUES 
+    ($1, $2, $3, $4) RETURNING *;`
+  return await pool.query(sql, [
+      review_description,
+      review_date,
+      account_id,
+      inv_id])
+  } catch (error) {
+    new Error("Add review Error")
+  }
+}
+
+/* ***************************
+ *  Display Reviews in the Cars Details page
+ * ************************** */
+async function getReviewsList(inv_id) {
+  try{
+    const sql = `SELECT 
+    r.review_id, 
+    r.review_date, 
+    r.review_description, 
+    a.account_firstname  
+      FROM public.review r
+      INNER JOIN public.account a
+      ON r.account_id = a.account_id
+      WHERE r.inv_id = $1
+    `
+    const data = await pool.query(sql, [inv_id])
+    return data.rows
+  } catch(error){
+    new Error("Get review Error")
+  }
+}
 
 
 module.exports = {
@@ -172,5 +216,7 @@ module.exports = {
   addClassification,
   addVehicle,
   updateInventory,
-  deleteInventory
+  deleteInventory,
+  addNewReviewCar,
+  getReviewsList
 };

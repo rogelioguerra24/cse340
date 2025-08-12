@@ -1,0 +1,36 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+<%- messages() %>
+<div class="login-form">
+    <p>All Fields needs are required</p>
+    <form id="updateCarReview" action="/account/update-review-account" method="post">
+        <div>
+            <label for="display">Review Date</label>
+            <input type="text" id="display" name="display" readonly
+            value="<%= new Date().toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            }) %>">
+        </div>
+
+        <div>
+            <label for="review_description">Review Text</label>
+            <textarea rows="5" name="review_description" id="review_description"
+                title="Provide the review for the car" required><%= locals.review_description %></textarea>
+        </div>
+        
+        <input type="submit" id="submit" name="submit" value="Update">
+      
+        <input type="hidden" id="review_date" name="review_date"
+            value="<%= new Date().toISOString().split('T')[0] %> %>">
+            
+        <input type="hidden" name="review_id"
+        <% if(locals.review_id) { %> value="<%= locals.review_id %>"
+        <% } %>>
+    </form>
+   
+</div>

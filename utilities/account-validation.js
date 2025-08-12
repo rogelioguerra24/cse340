@@ -252,5 +252,49 @@ validate.checkUpdatePasswordData = async (req, res, next) => {
   next() // allows the process to continue into the controller for the registration to be carried out.
 }
 
+validate.updateReviewRules = () => {
+return [
+    // firstname is required and must be string
+    body("review_description")
+        .trim()
+        .escape()
+        .isLength({ min: 1 })
+        .notEmpty()
+        .withMessage("Please provide a description."),
+
+    body("review_date")
+        .trim()
+        .notEmpty()
+        .withMessage("Review date is required"),
+
+    // valid id is required
+    body("review_id")
+        .trim()
+        .isInt(),
+]
+}
+
+validate.checkUpdateReview = async (req, res, next) => {
+    const { review_description,
+    review_date,
+    review_id } = req.body
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        req.flash("message notice", `Dont forget to write a review`)
+        const data = await accountModel.getReviewsById(review_id)
+        let nav = await utilities.getNav()
+        res.render("review/update-review", {
+            errors,
+            title: "Edit "+ data.inv_year +" "+ data.inv_make +" "+ data.inv_model +" Review",
+            nav,
+            review_description,
+            review_date,
+            review_id
+    })
+    return
+  }
+  next() // allows the process to continue into the controller for the registration to be carried out.
+}
 
 module.exports = validate

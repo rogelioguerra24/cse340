@@ -1,0 +1,33 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+<%- messages() %>
+<div class="login-form">
+    <p>Confirm Correc Item! Deletion Cannot be Undone</p>
+    <form id="deleteCarReview" action="/account/delete-review-account" method="post">
+        <div>
+            <label for="display">Review Date</label>
+            <input type="text" id="display" name="display" readonly
+            value="<%= new Date().toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            }) %>">
+        </div>
+
+        <div>
+            <label for="review_description">Review Text</label>
+            <textarea rows="5" name="review_description" id="review_description"
+                title="Provide the review for the car" readonly><%= locals.review_description %></textarea>
+        </div>
+        
+        <input type="submit" id="submit" name="submit" value="Delete">
+            
+        <input type="hidden" name="review_id"
+        <% if(locals.review_id) { %> value="<%= locals.review_id %>"
+        <% } %>>
+    </form>
+   
+</div>

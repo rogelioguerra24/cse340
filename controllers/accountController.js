@@ -124,14 +124,18 @@ async function accountLogin(req, res) {
 * *************************************** */
 async function buildManagementView(req, res, next) {
   let nav = await utilities.getNav()
-  
+  const token = req.cookies.jwt
+  const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+  const account_id = decoded.account_id
+  const reviewData = await accountModel.getAccountReviews(account_id)
+  const listReview = await utilities.displayReviewAccountList(reviewData)
   req.flash("notice", 'You are logged in')
   res.render("account/account-management", {
     title: "Account Management",
     nav,
-    errors: null
+    errors: null,
+    reviewAccountList: listReview
   })
-
 }
 
 async function buildAccountEditView(req, res, next) {
@@ -231,11 +235,108 @@ async function updatePassword(req, res, next) {
 }
 
 
+async function buildAccountEditReview(req, res, next) {
+  const review_id = parseInt(req.params.review_id)
+  const data = await accountModel.getReviewsById(review_id)
+  let nav = await utilities.getNav()
+   res.render("review/update-review", {
+    title: "Edit "+ data.inv_year +" "+ data.inv_make +" "+ data.inv_model +" Review",
+    nav,
+    errors: null,
+    review_id: review_id,
+    review_description: data.review_description
+  })
+}
+
+
+/* ****************************************
+*  Process Update Data Account
+* *************************************** */
+ async function updateReview (req, res, next) {
+  let nav = await utilities.getNav()
+  
+  const {
+    review_description,
+    review_date,
+    review_id
+  } = req.body
+
+  const updateResult = await accountModel.updateReviewData(
+    review_description,
+    review_date,
+    review_id
+  )
+  
+  if (updateResult) {
+    req.flash("message notice", `Your review has been updated. Congratulations!`)
+    res.redirect("/account/")
+  } else {
+    const data = await accountModel.getReviewsById(review_id)
+    req.flash("message notice", "Sorry, the insert failed.")
+    res.status(501).render("review/update-review", {
+      title: "Edit "+ data.inv_year +" "+ data.inv_make +" "+ data.inv_model +" Review",
+      nav,
+      errors: null,
+      review_description,
+      review_date,
+      review_id
+    })
+  }
+}
+
+
+/* ****************************************
+*  Process Delete Data Account
+* *************************************** */
+async function buildAccountDeleteReview(req, res, next) {
+  const review_id = parseInt(req.params.review_id)
+  const data = await accountModel.getReviewsById(review_id)
+  let nav = await utilities.getNav()
+   res.render("review/delete-review", {
+    title: "Delete "+ data.inv_year +" "+ data.inv_make +" "+ data.inv_model +" Review",
+    nav,
+    errors: null,
+    review_id: review_id,
+    review_description: data.review_description
+  })
+}
+
+async function deleteReview(req, res, next) {
+  let nav = await utilities.getNav()
+  
+  const {
+    review_id
+  } = req.body
+
+  const deleteResult = await accountModel.deleteReviewById(review_id)
+
+  if (deleteResult) {
+    req.flash("message notice", `The deletion was successfull`)
+    res.redirect("/account/")
+  } else {
+    const data = await accountModel.getReviewsById(review_id)
+    req.flash("notice", "Sorry, the deletion failed.")
+    res.status(501).render("review/delete-review", {
+    title: "Delete "+ data.inv_year +" "+ data.inv_make +" "+ data.inv_model +" Review",
+    nav,
+    errors: null,
+    review_id,
+    review_description: data.review_description
+    })
+  }
+}
+
+
 module.exports = { buildLogin, 
   buildRegister, 
   registerAccount, 
   accountLogin, 
   buildAccountEditView,
   buildManagementView,
-updateAccount,
-updatePassword}
+  updateAccount,
+  updatePassword,
+  buildAccountEditReview,
+  updateReview,
+  buildAccountDeleteReview,
+  deleteReview
+}

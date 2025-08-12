@@ -7,12 +7,18 @@
 </div>
 
 <div class="account-mng">
+  <h2>My reviews</h2>
+  <% if (reviewAccountList) { %>
+  <div class="reviewAccountDetail"><%- reviewAccountList %></div>
+<% } %>
+</div>
+
+<div class="account-mng">
   <% if (accountData.account_type === "Employee" || accountData.account_type === "Admin") { %>
   <h2>Manage Inventory</h2>
   <a href="/inv" title="Management View">Manage Inventory</a>
 <% } %>
 </div>
-
 
 
 <% if (errors) { %>

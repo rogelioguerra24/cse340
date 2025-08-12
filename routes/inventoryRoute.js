@@ -5,6 +5,8 @@ const invController = require("../controllers/invController")
 const utilities = require("../utilities/")
 const addValidate = require("../utilities/inventory-validation")
 const regValidate = require('../utilities/account-validation')
+const revValidation = require('../utilities/review-validation')
+const revController = require('../controllers/reviewController')
 
 // Route to build inventory by classification view
 router.get("/type/:classificationId",  utilities.handleErrors(invController.buildByClassificationId));
@@ -60,5 +62,13 @@ router.get("/delete/:inv_id",
     regValidate.accountAdminEmployeeType,
     utilities.handleErrors(invController.deleteInventoryView))
 router.post("/delete/", utilities.handleErrors(invController.deleteInventory))
+
+
+//This route is for the form of each car 
+router.post("/review/",
+    revValidation.reviewDataRules(),
+    revValidation.checkReviewDataRules,
+    utilities.handleErrors(revController.addNewReview)
+)
 
 module.exports = router;

@@ -25,13 +25,17 @@ invCont.buildByClassificationId = async function (req, res, next) {//this is a m
 invCont.buildByCarsDetails = async function (req, res, next) {//this is a method
   const inv_id = req.params.invid
   const data = await invModel.getInventoryByCarDetail(inv_id)
+  const reviewData = await invModel.getReviewsList(inv_id)
+  const listReview = await utilities.displayReviewList(reviewData)
   const section = await utilities.buildCarDetailSection(data) // this is in utilities
   let nav = await utilities.getNav()
   const carName = data.inv_year + " " + data.inv_make + " " + data.inv_model
   res.render("./inventory/detailsCars", {
     title: carName + " vehicle",
     nav,
-    section
+    section,
+    inv_id,
+    reviewList: listReview
   })
 }
 
